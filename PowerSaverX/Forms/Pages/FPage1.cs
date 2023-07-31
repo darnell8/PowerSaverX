@@ -5,6 +5,7 @@ namespace Sunny.UI.Demo
 {
     public partial class FPage1 : UIPage
     {
+        public static int pageIndex = 1010;
         public FPage1()
         {
             InitializeComponent();
@@ -20,7 +21,6 @@ namespace Sunny.UI.Demo
             uiComboBox1.DataSource = powerPlanList;
 
             Debug.WriteLine("2. FButton_Init");
-
         }
     }
 }

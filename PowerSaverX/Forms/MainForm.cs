@@ -1,8 +1,7 @@
 using PowerSaverX.Utils;
 using Sunny.UI;
 using Sunny.UI.Demo;
-using System.Runtime.InteropServices;
-using Timer = System.Windows.Forms.Timer;
+using System.Diagnostics;
 
 namespace PowerSaverX
 {
@@ -11,9 +10,8 @@ namespace PowerSaverX
 
         // 在这里定义你希望管理的进程名称和对应的电源计划名称
         private string targetProcessName = "YourTargetProcess.exe";
-        private Guid highPerformancePlanGuid = Guid.Empty; // 可以通过 `powercfg /list` 命令获取 GUID
-        private Guid balancedPlanGuid = Guid.Empty;
-        private Guid powerSaverPlanGuid = Guid.Empty;
+        private Guid selectedPlanGuid = Guid.Empty; // 可以通过 `powercfg /list` 命令获取 GUID
+
         public MainForm()
         {
             InitializeComponent();
@@ -22,20 +20,20 @@ namespace PowerSaverX
             Header.TabControl = MainTabControl;
 
             //增加页面到Main
-            AddPage(new FPage1(), 1001);
-            AddPage(new FPage2(), 1002);
-            AddPage(new FPage3(), 1003);
+            AddPage(new FPage1(), FPage1.pageIndex);
+            AddPage(new FPage2(), FPage2.pageIndex);
+            AddPage(new FPage3(), FPage3.pageIndex);
 
             //设置Header节点索引
-            Header.CreateNode("设置", 1001);
-            Header.CreateNode("TODO", 1002);
-            Header.CreateNode("关于", 1003);
+            Header.CreateNode("设置", FPage1.pageIndex);
+            Header.CreateNode("TODO", FPage2.pageIndex);
+            Header.CreateNode("关于", FPage3.pageIndex);
 
             //显示默认界面
             Header.SelectedIndex = 0;
 
             // 设置定时器，每隔一段时间检查进程和电源计划
-            //timer1.Start();
+            timer1.Start();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -43,10 +41,20 @@ namespace PowerSaverX
             string currentProcessName = PowerUtils.GetActiveProcessName();
             string currentPowerPlanGuid = PowerUtils.GetCurrentPowerPlanGuidNew();
 
-            // 如果正在运行的进程是目标进程，而且当前的电源计划不是高性能计划，则切换到高性能计划
-            if (currentProcessName.Contains(targetProcessName) && currentPowerPlanGuid != highPerformancePlanGuid + "")
+            if (GetPage(FPage1.pageIndex) is FPage1 fPage1)
             {
-                PowerUtils.SwitchToPowerPlan(highPerformancePlanGuid + "");
+                var selectedValueObj = fPage1.uiComboBox1.SelectedValue;
+                if (selectedValueObj is PowerUtils.PowerPlan selectedValue)
+                {
+                    selectedPlanGuid = selectedValue.PlanGuid;
+                    Debug.WriteLine($"当前选择的电源计划为：${selectedPlanGuid}");
+                } 
+            }
+
+            // 如果正在运行的进程是目标进程，而且当前的电源计划不是选中计划，则切换到选中计划
+            if (currentProcessName.Contains(targetProcessName) && currentPowerPlanGuid != selectedPlanGuid + "")
+            {
+                PowerUtils.SwitchToPowerPlan(selectedPlanGuid + "");
             }
             // 否则，切换到默认的平衡计划或其他你希望使用的计划
             else
