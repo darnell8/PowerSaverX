@@ -36,9 +36,6 @@ namespace Sunny.UI.Demo
             uiComboBox1.ValueMember = "PlanGuid";
             uiComboBox2.DisplayMember = "FriendlyName";
             uiComboBox2.ValueMember = "PlanGuid";
-
-            uiIntegerUpDown1.Value = Settings.Default.ListeningInterval;
-            uiTextBox1.Text = Settings.Default.ListeningProceeName;
         }
 
         public override void Final()
@@ -47,7 +44,8 @@ namespace Sunny.UI.Demo
             base.Final();
 
             Settings.Default.ListeningInterval = uiIntegerUpDown1.Value;
-            Settings.Default.ListeningProceeName = uiTextBox1.Text;
+            //Settings.Default.ListeningProceeName = uiTextBox1.Text;
+            Settings.Default.ListeningProceeName = uiComboDataGridView1.Text;
 
             if (uiComboBox2.SelectedValue is Guid selectedValue)
             {
@@ -68,6 +66,37 @@ namespace Sunny.UI.Demo
             uiComboBox2.SelectedValue = Settings.Default.SwitchPlanGuid;
 
             uiTextBox2.Text = currentPowerPlan?.FriendlyName;
+
+            uiIntegerUpDown1.Value = Settings.Default.ListeningInterval;
+            uiTextBox1.Text = Settings.Default.ListeningProceeName;
+            uiComboDataGridView1.Text = Settings.Default.ListeningProceeName;
+
+            InitComboDataGridView();
+        }
+
+        private void InitComboDataGridView()
+        {
+            // 选择当前所有程序
+            // 获取当前设备上所有正在运行的进程
+            Process[] processes = Process.GetProcesses();
+            processes = processes.Where(p => p.SessionId != 0 && p.MainWindowTitle != "").DistinctBy(p => p.ProcessName)
+                .OrderByDescending(p => p.StartTime).ToArray();
+            uiComboDataGridView1.DataGridView.Init();
+            uiComboDataGridView1.DataGridView.MultiSelect = true;//设置可多选
+            //uiComboDataGridView1.ItemSize = new Size(360, 240);
+            //uiComboDataGridView1.DataGridView.AddColumn("序号", "Id");
+            uiComboDataGridView1.DataGridView.AddColumn("窗口名称", "MainWindowTitle");
+            uiComboDataGridView1.DataGridView.AddColumn("启动时间", "StartTime");
+            uiComboDataGridView1.DataGridView.AddColumn("进程名称", "ProcessName");
+            //uiComboDataGridView1.DataGridView.AddColumn("SessionId", "SessionId");
+            //uiComboDataGridView1.DataGridView.AddColumn("私有内存使用量1", "PrivateMemorySize");
+            //uiComboDataGridView1.DataGridView.AddColumn("私有内存使用量2", "PrivateMemorySize64");
+            //uiComboDataGridView1.DataGridView.AddColumn("虚拟内存使用量1", "VirtualMemorySize");
+            //uiComboDataGridView1.DataGridView.AddColumn("虚拟内存使用量2", "VirtualMemorySize64");
+            uiComboDataGridView1.DataGridView.ReadOnly = true;
+            uiComboDataGridView1.ShowFilter = true;
+            uiComboDataGridView1.DataGridView.DataSource = processes;
+            //uiComboDataGridView1.FilterColumnName = "Column1"; //不设置则全部列过滤
         }
 
         private int value;
@@ -75,6 +104,7 @@ namespace Sunny.UI.Demo
         {
             if (value == 100)
             {
+                // 进度条满100的时候执行
                 string currentProcessName = PowerUtils.GetActiveProcessName();
                 Guid currentPowerPlanGuid = PowerUtils.GetCurrentPowerPlanGuidNew();
 
@@ -85,8 +115,9 @@ namespace Sunny.UI.Demo
                     Debug.WriteLine($"当前选择的电源计划为：{selectedPlanGuid}");
                 }
 
+                string[] runningProcessName = uiComboDataGridView1.Text.Split(";").Select(p => p.Trim()).ToArray();
                 // 如果正在运行的进程是目标进程，而且当前的电源计划不是选中计划，则切换到选中计划
-                if (currentProcessName.Contains(targetProcessName) && currentPowerPlanGuid != selectedPlanGuid)
+                if (!runningProcessName.Contains(currentProcessName) && currentPowerPlanGuid != selectedPlanGuid)
                 {
                     PowerUtils.SwitchToPowerPlan(selectedPlanGuid + "");
                 }
@@ -99,6 +130,7 @@ namespace Sunny.UI.Demo
                 }
 
                 uiTextBox2.Text = PowerUtils.GetPowerPlanName(PowerUtils.GetCurrentPowerPlanGuidNew());
+                InitComboDataGridView();
 
                 value = 0;
             }
@@ -108,6 +140,20 @@ namespace Sunny.UI.Demo
             }
 
             uiRoundProcess1.Value = value;
+        }
+
+        private void uiComboDataGridView1_ValueChanged(object sender, object value)
+        {
+            uiComboDataGridView1.Text = "";
+            if (value is DataGridViewSelectedRowCollection collection)
+            {
+                foreach (var item in collection)
+                {
+                    DataGridViewRow row = (DataGridViewRow)item;
+                    uiComboDataGridView1.Text += row.Cells["进程名称"].Value + "";
+                    uiComboDataGridView1.Text += "; ";
+                }
+            }
         }
     }
 }

@@ -56,7 +56,7 @@
             AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(800, 450);
             Name = "MainForm";
-            Text = "Form1";
+            Text = "PowerSaverX";
             ZoomScaleRect = new Rectangle(15, 15, 800, 450);
             Header.ResumeLayout(false);
             ResumeLayout(false);

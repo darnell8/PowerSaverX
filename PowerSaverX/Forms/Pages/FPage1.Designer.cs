@@ -44,6 +44,7 @@
             uiLabel4 = new UILabel();
             uiLabel5 = new UILabel();
             uiTextBox2 = new UITextBox();
+            uiComboDataGridView1 = new UIComboDataGridView();
             SuspendLayout();
             // 
             // uiLine1
@@ -122,15 +123,16 @@
             // 
             uiTextBox1.ButtonSymbolOffset = new Point(0, 0);
             uiTextBox1.Font = new Font("微软雅黑", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            uiTextBox1.Location = new Point(226, 249);
+            uiTextBox1.Location = new Point(139, 288);
             uiTextBox1.Margin = new Padding(4, 5, 4, 5);
             uiTextBox1.MinimumSize = new Size(1, 16);
             uiTextBox1.Name = "uiTextBox1";
             uiTextBox1.Padding = new Padding(5);
             uiTextBox1.ShowText = false;
-            uiTextBox1.Size = new Size(150, 29);
+            uiTextBox1.Size = new Size(237, 29);
             uiTextBox1.TabIndex = 6;
             uiTextBox1.TextAlignment = ContentAlignment.MiddleLeft;
+            uiTextBox1.Visible = false;
             uiTextBox1.Watermark = "";
             // 
             // uiLine3
@@ -224,10 +226,27 @@
             uiTextBox2.TextAlignment = ContentAlignment.MiddleLeft;
             uiTextBox2.Watermark = "";
             // 
+            // uiComboDataGridView1
+            // 
+            uiComboDataGridView1.DropDownStyle = UIDropDownStyle.DropDownList;
+            uiComboDataGridView1.FillColor = Color.White;
+            uiComboDataGridView1.Font = new Font("微软雅黑", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            uiComboDataGridView1.Location = new Point(139, 249);
+            uiComboDataGridView1.Margin = new Padding(4, 5, 4, 5);
+            uiComboDataGridView1.MinimumSize = new Size(63, 0);
+            uiComboDataGridView1.Name = "uiComboDataGridView1";
+            uiComboDataGridView1.Padding = new Padding(0, 0, 30, 2);
+            uiComboDataGridView1.Size = new Size(237, 29);
+            uiComboDataGridView1.TabIndex = 13;
+            uiComboDataGridView1.TextAlignment = ContentAlignment.MiddleLeft;
+            uiComboDataGridView1.Watermark = "";
+            uiComboDataGridView1.ValueChanged += uiComboDataGridView1_ValueChanged;
+            // 
             // FPage1
             // 
             AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(800, 450);
+            Controls.Add(uiComboDataGridView1);
             Controls.Add(uiTextBox2);
             Controls.Add(uiLabel5);
             Controls.Add(uiLabel4);
@@ -265,5 +284,6 @@
         private UILabel uiLabel4;
         private UILabel uiLabel5;
         private UITextBox uiTextBox2;
+        private UIComboDataGridView uiComboDataGridView1;
     }
 }
