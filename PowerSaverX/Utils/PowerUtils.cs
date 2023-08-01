@@ -1,8 +1,4 @@
-﻿using Microsoft.Win32;
-using Sunny.UI;
-using System;
-using System.Diagnostics;
-using System.Management;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace PowerSaverX.Utils
@@ -26,18 +22,7 @@ namespace PowerSaverX.Utils
                     resultList.Add(new PowerPlan() {
                         FriendlyName = planName,
                         PlanGuid = buffer,
-                    }); ;
-
-                    if (planName == "High performance" || planName == "高性能")
-                    {
-
-                    }
-                    else if (planName == "Balanced" || planName == "平衡")
-                    {
-                    }
-                    else if (planName == "Power saver" || planName == "节能")
-                    {
-                    }
+                    });
                 }
                 else if (result == 259) // ERROR_NO_MORE_ITEMS (0x103)
                 {
@@ -49,8 +34,6 @@ namespace PowerSaverX.Utils
                     Debug.WriteLine("Failed to enumerate power plans. Error code: " + result);
                     break;
                 }
-
-
             }
 
             // 输出相应的电源计划GUID
@@ -110,8 +93,7 @@ namespace PowerSaverX.Utils
                 IntPtr hWnd = GetForegroundWindow();
 
                 // 获取进程 ID
-                uint processId;
-                GetWindowThreadProcessId(hWnd, out processId);
+                _ = GetWindowThreadProcessId(hWnd, out uint processId);
 
                 // 获取进程名称
                 Process process = Process.GetProcessById((int)processId);
@@ -124,35 +106,6 @@ namespace PowerSaverX.Utils
                 Debug.WriteLine($"GetActiveProcessName: error -> {ex.Message}");
             }
             return processName;
-        }
-
-        /// <summary>
-        /// 在新版本的Windows操作系统中，Win32_PowerPlan WMI类已被弃用，并且不再直接可用。
-        /// </summary>
-        /// <returns></returns>
-        private string GetCurrentPowerPlanGuid()
-        {
-            string powerPlanGuid = string.Empty;
-            try
-            {
-                ManagementClass powerClass = new ManagementClass("Win32_PowerPlan");
-                ManagementObjectCollection powerPlans = powerClass.GetInstances();
-
-                foreach (ManagementObject powerPlan in powerPlans)
-                {
-                    if ((bool)powerPlan["IsActive"])
-                    {
-                        powerPlanGuid = powerPlan["InstanceID"] + "";
-                        break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // 处理异常情况
-                Debug.WriteLine($"GetCurrentPowerPlanGuid: error -> {ex.Message}");
-            }
-            return powerPlanGuid;
         }
 
         /// <summary>
@@ -172,7 +125,7 @@ namespace PowerSaverX.Utils
                 if (result == 0)
                 {
                     // 将IntPtr转换为Guid
-                    activeGuid = (Guid)Marshal.PtrToStructure(activeGuidPtr, typeof(Guid));
+                    activeGuid = Marshal.PtrToStructure<Guid>(activeGuidPtr);
 
                     // 输出活动的电源计划GUID
                     Debug.WriteLine("Active Power Plan GUID: " + activeGuid);
@@ -197,27 +150,6 @@ namespace PowerSaverX.Utils
             return activeGuid;
         }
 
-        /// <summary>
-        /// 调用PowerEnumerate() 为highPerformancePlanGuid、balancedPlanGuid、powerSaverPlanGuid赋值
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        private static Guid GetPowerPlanGuid(uint index)
-        {
-            Guid buffer = Guid.Empty;
-            uint bufferSize = (uint)Marshal.SizeOf(typeof(Guid));
-            uint result = PowerEnumerate(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, ACCESS_SCHEME, index, ref buffer, ref bufferSize);
-            if (result == 0)
-            {
-                return buffer;
-            }
-            else
-            {
-                throw new Exception("Failed to get power plan GUID. Error code: " + result);
-            }
-        }
-
         public static string GetPowerPlanName(Guid schemeGuid)
         {
             uint bufferSize = 0;
@@ -232,40 +164,12 @@ namespace PowerSaverX.Utils
                 if (result == 0)
                 {
                     // 从缓冲区中获取友好名称并释放缓冲区
-                    string friendlyName = Marshal.PtrToStringUni(buffer);
+                    string? friendlyName = Marshal.PtrToStringUni(buffer);
                     Marshal.FreeHGlobal(buffer);
-                    return friendlyName;
+                    return friendlyName ?? "Unknown";
                 }
             }
 
-            return "Unknown";
-        }
-
-        private static string GetPowerPlanNameOld(Guid schemeGuid)
-        {
-            // 电源计划注册表路径
-            string powerPlanRegPath = @"SYSTEM\CurrentControlSet\Control\Power\User\PowerSchemes";
-
-            // 构建电源计划GUID的字符串表示形式
-            string schemeGuidString = schemeGuid.ToString("B").ToUpper();
-
-            // 在注册表中查找对应电源计划的名称
-            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(powerPlanRegPath))
-            {
-                foreach (string subKeyName in key.GetSubKeyNames())
-                {
-                    using (RegistryKey subKey = key.OpenSubKey(subKeyName))
-                    {
-                        string guidValue = subKey.GetValue("Alias") as string;
-                        if (guidValue != null && guidValue.Equals(schemeGuidString, StringComparison.OrdinalIgnoreCase))
-                        {
-                            return subKey.GetValue("FriendlyName") as string;
-                        }
-                    }
-                }
-            }
-
-            // 如果未找到对应的电源计划名称，返回默认名称
             return "Unknown";
         }
 
@@ -287,8 +191,6 @@ namespace PowerSaverX.Utils
 
 
         private const uint ACCESS_SCHEME = 16;
-        private const uint ACCESS_SUBGROUP = 17;
-        private const uint ACCESS_INDIVIDUAL_SETTING = 18;
 
         public class PowerPlan
         {
