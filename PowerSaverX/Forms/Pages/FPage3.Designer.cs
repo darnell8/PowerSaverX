@@ -28,40 +28,49 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.uiSymbolLabel1 = new Sunny.UI.UISymbolLabel();
-            this.SuspendLayout();
+            uiLine1 = new UILine();
+            uiRichTextBox1 = new UIRichTextBox();
+            SuspendLayout();
             // 
-            // uiSymbolLabel1
+            // uiLine1
             // 
-            this.uiSymbolLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uiSymbolLabel1.Font = new System.Drawing.Font("微软雅黑", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiSymbolLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(155)))), ((int)(((byte)(40)))));
-            this.uiSymbolLabel1.Location = new System.Drawing.Point(0, 0);
-            this.uiSymbolLabel1.Name = "uiSymbolLabel1";
-            this.uiSymbolLabel1.Padding = new System.Windows.Forms.Padding(68, 0, 0, 0);
-            this.uiSymbolLabel1.Size = new System.Drawing.Size(800, 450);
-            this.uiSymbolLabel1.Style = Sunny.UI.UIStyle.Custom;
-            this.uiSymbolLabel1.StyleCustomMode = true;
-            this.uiSymbolLabel1.Symbol = 61553;
-            this.uiSymbolLabel1.SymbolColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(155)))), ((int)(((byte)(40)))));
-            this.uiSymbolLabel1.SymbolSize = 64;
-            this.uiSymbolLabel1.TabIndex = 2;
-            this.uiSymbolLabel1.Text = "This is Page3";
+            uiLine1.Font = new Font("微软雅黑", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            uiLine1.Location = new Point(12, 12);
+            uiLine1.MinimumSize = new Size(1, 1);
+            uiLine1.Name = "uiLine1";
+            uiLine1.Size = new Size(775, 29);
+            uiLine1.TabIndex = 0;
+            uiLine1.Text = "项目介绍";
+            // 
+            // uiRichTextBox1
+            // 
+            uiRichTextBox1.FillColor = Color.White;
+            uiRichTextBox1.Font = new Font("微软雅黑", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            uiRichTextBox1.Location = new Point(13, 49);
+            uiRichTextBox1.Margin = new Padding(4, 5, 4, 5);
+            uiRichTextBox1.MinimumSize = new Size(1, 1);
+            uiRichTextBox1.Name = "uiRichTextBox1";
+            uiRichTextBox1.Padding = new Padding(2);
+            uiRichTextBox1.ReadOnly = true;
+            uiRichTextBox1.ShowText = false;
+            uiRichTextBox1.Size = new Size(774, 180);
+            uiRichTextBox1.TabIndex = 1;
+            uiRichTextBox1.TextAlignment = ContentAlignment.MiddleCenter;
             // 
             // FPage3
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.uiSymbolLabel1);
-            this.Name = "FPage3";
-            this.Text = "FPage3";
-            this.ResumeLayout(false);
-
+            AutoScaleMode = AutoScaleMode.None;
+            ClientSize = new Size(800, 450);
+            Controls.Add(uiRichTextBox1);
+            Controls.Add(uiLine1);
+            Name = "FPage3";
+            Text = "FPage3";
+            ResumeLayout(false);
         }
 
         #endregion
 
-        private UISymbolLabel uiSymbolLabel1;
+        private UILine uiLine1;
+        private UIRichTextBox uiRichTextBox1;
     }
 }

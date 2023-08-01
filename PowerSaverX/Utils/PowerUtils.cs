@@ -128,7 +128,7 @@ namespace PowerSaverX.Utils
                     activeGuid = Marshal.PtrToStructure<Guid>(activeGuidPtr);
 
                     // 输出活动的电源计划GUID
-                    Debug.WriteLine("Active Power Plan GUID: " + activeGuid);
+                    //Debug.WriteLine("Active Power Plan GUID: " + activeGuid);
                 }
                 else
                 {

@@ -28,40 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.uiSymbolLabel1 = new Sunny.UI.UISymbolLabel();
-            this.SuspendLayout();
-            // 
-            // uiSymbolLabel1
-            // 
-            this.uiSymbolLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uiSymbolLabel1.Font = new System.Drawing.Font("微软雅黑", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiSymbolLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(190)))), ((int)(((byte)(40)))));
-            this.uiSymbolLabel1.Location = new System.Drawing.Point(0, 0);
-            this.uiSymbolLabel1.Name = "uiSymbolLabel1";
-            this.uiSymbolLabel1.Padding = new System.Windows.Forms.Padding(68, 0, 0, 0);
-            this.uiSymbolLabel1.Size = new System.Drawing.Size(800, 450);
-            this.uiSymbolLabel1.Style = Sunny.UI.UIStyle.Custom;
-            this.uiSymbolLabel1.StyleCustomMode = true;
-            this.uiSymbolLabel1.Symbol = 61528;
-            this.uiSymbolLabel1.SymbolColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(190)))), ((int)(((byte)(40)))));
-            this.uiSymbolLabel1.SymbolSize = 64;
-            this.uiSymbolLabel1.TabIndex = 1;
-            this.uiSymbolLabel1.Text = "This is Page2";
+            SuspendLayout();
             // 
             // FPage2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.uiSymbolLabel1);
-            this.Name = "FPage2";
-            this.Text = "FPage2";
-            this.ResumeLayout(false);
-
+            AutoScaleMode = AutoScaleMode.None;
+            ClientSize = new Size(800, 450);
+            Name = "FPage2";
+            Text = "FPage2";
+            ResumeLayout(false);
         }
 
         #endregion
-
-        private UISymbolLabel uiSymbolLabel1;
     }
 }

@@ -86,6 +86,7 @@
             // 
             // uiIntegerUpDown1
             // 
+            uiIntegerUpDown1.Enabled = false;
             uiIntegerUpDown1.Font = new Font("微软雅黑", 12F, FontStyle.Regular, GraphicsUnit.Point);
             uiIntegerUpDown1.Location = new Point(226, 210);
             uiIntegerUpDown1.Margin = new Padding(4, 5, 4, 5);
