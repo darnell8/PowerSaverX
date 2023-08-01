@@ -28,14 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            timer1 = new System.Windows.Forms.Timer(components);
+            uiAvatar1 = new Sunny.UI.UIAvatar();
+            Header.SuspendLayout();
             SuspendLayout();
             // 
-            // timer1
+            // Header
             // 
-            timer1.Interval = 5000;
-            timer1.Tick += timer1_Tick;
+            Header.Controls.Add(uiAvatar1);
+            // 
+            // uiAvatar1
+            // 
+            uiAvatar1.BackgroundImage = Properties.Resources.Logo;
+            uiAvatar1.BackgroundImageLayout = ImageLayout.Stretch;
+            uiAvatar1.FillColor = Color.Transparent;
+            uiAvatar1.Font = new Font("微软雅黑", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            uiAvatar1.Icon = Sunny.UI.UIAvatar.UIIcon.Image;
+            uiAvatar1.Location = new Point(20, 23);
+            uiAvatar1.MinimumSize = new Size(1, 1);
+            uiAvatar1.Name = "uiAvatar1";
+            uiAvatar1.Size = new Size(256, 66);
+            uiAvatar1.Style = Sunny.UI.UIStyle.Custom;
+            uiAvatar1.TabIndex = 0;
+            uiAvatar1.Text = "uiAvatar1";
             // 
             // MainForm
             // 
@@ -44,11 +58,11 @@
             Name = "MainForm";
             Text = "Form1";
             ZoomScaleRect = new Rectangle(15, 15, 800, 450);
+            Header.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
-
-        private System.Windows.Forms.Timer timer1;
+        private Sunny.UI.UIAvatar uiAvatar1;
     }
 }

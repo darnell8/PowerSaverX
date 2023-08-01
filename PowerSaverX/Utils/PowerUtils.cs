@@ -63,9 +63,36 @@ namespace PowerSaverX.Utils
 
         public static void SwitchToPowerPlan(string powerPlanGuid)
         {
+            // 使用 ProcessStartInfo 类来设置启动选项
+            ProcessStartInfo startInfo = new()
+            {
+                FileName = "powercfg.exe",
+                Arguments = $"/s {powerPlanGuid}",
+                CreateNoWindow = true, // 设置为 true，不显示窗口
+                UseShellExecute = false, // 设置为 false，不使用 shell 执行
+                RedirectStandardOutput = true, // 设置为 true，捕获输出信息
+                RedirectStandardError = true // 设置为 true，捕获错误信息
+            };
+
             try
             {
-                Process.Start("powercfg.exe", $"/s {powerPlanGuid}");
+                using Process process = new();
+                // 将 ProcessStartInfo 对象赋值给 Process 的 StartInfo 属性
+                process.StartInfo = startInfo;
+                // 启动进程
+                process.Start();
+                // 等待进程执行完成
+                process.WaitForExit();
+
+                // 检查进程的退出代码，非零值表示执行命令出错
+                if (process.ExitCode != 0)
+                {
+                    Console.WriteLine($"Failed to set power plan. Exit code: {process.ExitCode}");
+                }
+                else
+                {
+                    Console.WriteLine("Power plan set successfully.");
+                }
             }
             catch (Exception ex)
             {
@@ -89,6 +116,7 @@ namespace PowerSaverX.Utils
                 // 获取进程名称
                 Process process = Process.GetProcessById((int)processId);
                 processName = process.ProcessName;
+                Debug.WriteLine($"GetActiveProcessName: processName -> {process.ProcessName}");
             }
             catch (Exception ex)
             {
@@ -132,9 +160,9 @@ namespace PowerSaverX.Utils
         /// 这个类可以通过PowerEnumerate函数和PowerGetActiveScheme函数来获取活动的电源计划信息。
         /// </summary>
         /// <returns></returns>
-        public static string GetCurrentPowerPlanGuidNew()
+        public static Guid GetCurrentPowerPlanGuidNew()
         {
-            string powerPlanGuid = string.Empty;
+            Guid activeGuid = Guid.Empty;
             IntPtr activeGuidPtr = IntPtr.Zero;
             try
             {
@@ -144,11 +172,10 @@ namespace PowerSaverX.Utils
                 if (result == 0)
                 {
                     // 将IntPtr转换为Guid
-                    Guid activeGuid = (Guid)Marshal.PtrToStructure(activeGuidPtr, typeof(Guid));
+                    activeGuid = (Guid)Marshal.PtrToStructure(activeGuidPtr, typeof(Guid));
 
                     // 输出活动的电源计划GUID
                     Debug.WriteLine("Active Power Plan GUID: " + activeGuid);
-                    powerPlanGuid = activeGuid + "";
                 }
                 else
                 {
@@ -167,7 +194,7 @@ namespace PowerSaverX.Utils
                     Marshal.FreeHGlobal(activeGuidPtr);
                 }
             }
-            return powerPlanGuid;
+            return activeGuid;
         }
 
         /// <summary>
@@ -191,7 +218,7 @@ namespace PowerSaverX.Utils
             }
         }
 
-        private static string GetPowerPlanName(Guid schemeGuid)
+        public static string GetPowerPlanName(Guid schemeGuid)
         {
             uint bufferSize = 0;
             uint result = PowerReadFriendlyName(IntPtr.Zero, ref schemeGuid, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, ref bufferSize);
