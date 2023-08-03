@@ -19,7 +19,8 @@ namespace PowerSaverX.Utils
                 {
                     // 检查电源计划的名称，根据名称为相应的GUID赋值
                     string planName = GetPowerPlanName(buffer);
-                    resultList.Add(new PowerPlan() {
+                    resultList.Add(new PowerPlan()
+                    {
                         FriendlyName = planName,
                         PlanGuid = buffer,
                     });
@@ -171,6 +172,44 @@ namespace PowerSaverX.Utils
             }
 
             return "Unknown";
+        }
+
+        public static void SetProcessorState(Guid powerPlanGuid)
+        {
+            int minimumProcessorState = 0; // 设置最小处理器状态为 0%
+            int maximumProcessorState = 0; // 设置最大处理器状态为 0%
+
+            try
+            {
+                // 使用 powercfg.exe 命令修改处理器状态
+                RunPowerCfgCommand($"/setacvalueindex {powerPlanGuid} SUB_PROCESSOR PROCTHROTTLEMIN {minimumProcessorState}");
+                RunPowerCfgCommand($"/setacvalueindex {powerPlanGuid} SUB_PROCESSOR PROCTHROTTLEMAX {maximumProcessorState}");
+
+                Debug.WriteLine("成功修改电源计划的最小处理器状态和最大处理器状态。");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error: " + ex.Message);
+            }
+        }
+
+        // 运行 powercfg.exe 命令的辅助方法
+        private static void RunPowerCfgCommand(string arguments)
+        {
+            ProcessStartInfo psi = new()
+            {
+                FileName = "powercfg.exe",
+                Arguments = arguments,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true,
+                UseShellExecute = false
+            };
+
+            using Process process = new();
+            process.StartInfo = psi;
+            process.Start();
+            process.WaitForExit();
         }
 
         // 需要引入以下声明来获取窗口句柄

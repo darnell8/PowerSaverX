@@ -24,6 +24,11 @@ namespace Sunny.UI.Demo
 
             // 设置定时器，每隔一段时间检查进程和电源计划
             timer1.ReStart();
+
+            if (uiComboBox2.SelectedValue != null && uiComboBox2.SelectedValue is Guid tempGuid)
+            {
+                PowerUtils.SetProcessorState(tempGuid);
+            }
         }
 
         private void InitView()

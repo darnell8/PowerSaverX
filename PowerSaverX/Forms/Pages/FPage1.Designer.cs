@@ -184,9 +184,9 @@
             uiLabel3.Font = new Font("微软雅黑", 12F, FontStyle.Regular, GraphicsUnit.Point);
             uiLabel3.Location = new Point(16, 57);
             uiLabel3.Name = "uiLabel3";
-            uiLabel3.Size = new Size(74, 21);
+            uiLabel3.Size = new Size(116, 21);
             uiLabel3.TabIndex = 9;
-            uiLabel3.Text = "平时计划";
+            uiLabel3.Text = "平时计划(节能)";
             uiLabel3.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // uiLabel4
@@ -195,9 +195,9 @@
             uiLabel4.Font = new Font("微软雅黑", 12F, FontStyle.Regular, GraphicsUnit.Point);
             uiLabel4.Location = new Point(16, 96);
             uiLabel4.Name = "uiLabel4";
-            uiLabel4.Size = new Size(74, 21);
+            uiLabel4.Size = new Size(116, 21);
             uiLabel4.TabIndex = 10;
-            uiLabel4.Text = "切换计划";
+            uiLabel4.Text = "切换计划(平衡)";
             uiLabel4.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // uiLabel5
