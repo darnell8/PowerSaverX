@@ -38,12 +38,12 @@ namespace PowerSaverX.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ListeningProceeName {
+        public string ListeningProcessName {
             get {
-                return ((string)(this["ListeningProceeName"]));
+                return ((string)(this["ListeningProcessName"]));
             }
             set {
-                this["ListeningProceeName"] = value;
+                this["ListeningProcessName"] = value;
             }
         }
         

@@ -55,8 +55,8 @@ namespace Sunny.UI.Demo
             base.Final();
 
             Settings.Default.ListeningInterval = uiIntegerUpDown1.Value;
-            //Settings.Default.ListeningProceeName = uiTextBox1.Text;
-            Settings.Default.ListeningProceeName = uiComboDataGridView1.Text;
+            //Settings.Default.ListeningProcessName = uiTextBox1.Text;
+            Settings.Default.ListeningProcessName = uiComboDataGridView1.Text;
 
             if (uiComboBox1.SelectedValue is Guid dailyPlanGuid)
             {
@@ -83,8 +83,8 @@ namespace Sunny.UI.Demo
             uiComboBox2.SelectedValue = Settings.Default.SwitchPlanGuid;
 
             uiIntegerUpDown1.Value = Settings.Default.ListeningInterval;
-            uiTextBox1.Text = Settings.Default.ListeningProceeName;
-            uiComboDataGridView1.Text = Settings.Default.ListeningProceeName;
+            uiTextBox1.Text = Settings.Default.ListeningProcessName;
+            uiComboDataGridView1.Text = Settings.Default.ListeningProcessName;
 
             RefreshComboDataGridView();
         }
